@@ -19,16 +19,58 @@ class Caluculator {
       this.$currentPriviewPrompt.textContent + " " + operation;
     this.$currentPriviewPrompt.textContent = "";
     //previousOperation, currentOperation 작업
+    this.previousOperation = operation;
   }
 
   onEqual() {
-    // 밑에 메서드 이용해서 완성하기
-    this.handlePlus();
+    let result = 0;
+
+    switch (this.previousOperation) {
+      case "+":
+        result = this.handlePlus();
+        break;
+      case "-":
+        result = this.handleMinus();
+        break;
+      case "x":
+        result = this.handleMultifly();
+        break;
+      case "÷":
+        result = this.handleDivide();
+        break;
+      default:
+        break;
+    }
+
+    this.$previousPriviewPrompt.textContent = "";
+    this.$currentPriviewPrompt.textContent = result.toString();
+    this.currentOperation = "";
   }
-  handlePlus() {}
-  handleMinus() {}
-  handleMultifly() {}
-  handleDivide() {}
+
+  handlePlus() {
+    return (
+      +this.$previousPriviewPrompt.textContent.split(" ")[0] +
+      +this.$currentPriviewPrompt.textContent
+    );
+  }
+  handleMinus() {
+    return (
+      +this.$previousPriviewPrompt.textContent.split(" ")[0] -
+      +this.$currentPriviewPrompt.textContent
+    );
+  }
+  handleMultifly() {
+    return (
+      +this.$previousPriviewPrompt.textContent.split(" ")[0] *
+      +this.$currentPriviewPrompt.textContent
+    );
+  }
+  handleDivide() {
+    return (
+      +this.$previousPriviewPrompt.textContent.split(" ")[0] /
+      +this.$currentPriviewPrompt.textContent
+    );
+  }
 
   onReset() {
     this.$previousPriviewPrompt.textContent = "";
@@ -38,7 +80,8 @@ class Caluculator {
   }
 
   onDelete() {
-    console.log("삭제");
+    this.$currentPriviewPrompt.textContent =
+      this.$currentPriviewPrompt.textContent.slice(0, -1);
   }
 }
 
@@ -76,10 +119,12 @@ $operations.forEach(($operation) => {
       calc.onPressOperation("+");
     } else if (e.target.textContent === "-") {
       calc.onPressOperation("-");
-    } else if (e.target.textContent === "*") {
-      calc.onPressOperation("*");
+    } else if (e.target.textContent === "x") {
+      calc.onPressOperation("x");
     } else if (e.target.textContent === "÷") {
       calc.onPressOperation("÷");
+    } else if (e.target.textContent.trim() === "=") {
+      calc.onEqual("=");
     }
   });
 });
